@@ -25,5 +25,6 @@ urlpatterns = [
 ]
 
 urlpatterns = [
+    path("", include("accounts.urls")),
     path('', include('assur_predict.urls')),
 ]
