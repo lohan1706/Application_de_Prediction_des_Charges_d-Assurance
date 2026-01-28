@@ -32,6 +32,7 @@ LOGIN_URL = "/login/"
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts',
     'assur_predict',
     'profiles',
 
@@ -58,7 +59,7 @@ ROOT_URLCONF = 'Assur_Aimant.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        "DIRS": [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
