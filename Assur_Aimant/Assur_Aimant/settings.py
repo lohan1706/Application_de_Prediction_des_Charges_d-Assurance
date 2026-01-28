@@ -27,12 +27,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_URL = "/login/"
 
 # Application definition
 
 INSTALLED_APPS = [
     'accounts',
     'assur_predict',
+    'profiles',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -101,6 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "profiles.CustomUser"
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
