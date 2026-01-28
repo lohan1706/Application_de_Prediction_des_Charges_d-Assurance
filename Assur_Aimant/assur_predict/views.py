@@ -13,3 +13,12 @@ rmse = joblib.load(RMSE_PATH)
 
 def home(request):
     return render(request, 'assur_predict/home.html')
+
+
+class HomeView(TemplateView):
+    template_name = "assur_predict/home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["titre"] = "Bienvenue sur AssurPredict"
+        return context
