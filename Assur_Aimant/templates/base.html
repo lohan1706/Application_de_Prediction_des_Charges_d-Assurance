@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}AssurPredict{% endblock %}</title>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <h1>AssurPredict</h1>
+        <nav>
+            <a href="/">Accueil</a>
+
+            {% if user.is_authenticated %}
+                <span>Bonjour {{ user.username }}</span>
+                <a href="/logout/">Déconnexion</a>
+            {% else %}
+                <a href="/auth/">S’identifier / Créer un compte</a>
+            {% endif %}
+        </nav>
+        <hr>
+    </header>
+
+    <!-- CONTENU DES PAGES -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <hr>
+        <p>© 2026 – AssurPredict</p>
+    </footer>
+
+</body>
+</html>
+
