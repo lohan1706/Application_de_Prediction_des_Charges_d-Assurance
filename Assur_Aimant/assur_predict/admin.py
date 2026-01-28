@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Prediction
+from .models import Prediction
 
-admin.site.register(Profile)
 admin.site.register(Prediction)
 
