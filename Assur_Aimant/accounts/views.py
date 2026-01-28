@@ -1,35 +1,36 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, logout
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
 from django.contrib import messages
 
-def signup_view(request):
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, "Compte créé avec succès ")
-            return redirect("predict")
-    else:
-        form = UserCreationForm()
 
-    return render(request, "accounts/signup.html", {"form": form})
+class SignupView(CreateView):
+    """
+    Vue d'inscription utilisateur
+    """
+    form_class = UserCreationForm
+    template_name = "accounts/signup.html"
+    success_url = reverse_lazy("login")
 
-def login_view(request):
-    if request.method == "POST":
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            messages.success(request, "Connexion réussie ")
-            return redirect("predict")
-    else:
-        form = AuthenticationForm()
+    def form_valid(self, form):
+        messages.success(self.request, "Compte créé avec succès. Vous pouvez vous connecter.")
+        return super().form_valid(form)
 
-    return render(request, "accounts/login.html", {"form": form})
 
-def logout_view(request):
-    logout(request)
-    messages.info(request, "Vous avez été déconnecté ")
-    return redirect("login")
+class CustomLoginView(LoginView):
+    """
+    Vue de connexion utilisateur
+    """
+    template_name = "accounts/login.html"
+
+    def form_valid(self, form):
+        messages.success(self.request, "Connexion réussie.")
+        return super().form_valid(form)
+
+
+class CustomLogoutView(LogoutView):
+    """
+    Vue de déconnexion utilisateur
+    """
+    next_page = reverse_lazy("login")
