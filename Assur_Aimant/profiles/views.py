@@ -16,4 +16,5 @@ class ProfileView(UpdateView):
     success_url = reverse_lazy("profile")
 
     def get_object(self):
-        return Profile.objects.first()
+        return Profile.objects.first() #temporaire pour test remplacer par "return self.request.user.profile" après loggé
+
