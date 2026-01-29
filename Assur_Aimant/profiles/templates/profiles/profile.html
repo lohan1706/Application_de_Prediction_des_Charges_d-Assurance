@@ -1,7 +1,15 @@
-<h2>Profil utilisateur</h2>
+{% extends 'base.html' %}
+{% block title %}<h2>Profil utilisateur</h2>{% endblock %}
 
+{% block content %}
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Enregistrer</button>
 </form>
+
+{% if prediction %}
+<hr>
+<p>Charge estimée : {{ prediction.predicted_charge|floatformat:2 }} ± {{ rmse|floatformat:2 }} €</p>
+{% endif %}
+{% endblock %}
