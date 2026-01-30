@@ -1,15 +1,29 @@
-{% extends 'base.html' %}
-{% block title %}<h2>Profil utilisateur</h2>{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
-<form method="post">
+
+<h2 class="text-2xl font-bold text-center mb-6">
+    Votre profil
+</h2>
+
+<form method="post" class="space-y-4">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Enregistrer</button>
+
+    <button 
+        type="submit"
+        class="w-full bg-green-600 text-white py-2 rounded hover:bg-orange-700">
+        Enregistrer
+    </button>
 </form>
 
 {% if prediction %}
-<hr>
-<p>Charge estimée : {{ prediction.predicted_charge|floatformat:2 }} ± {{ rmse|floatformat:2 }} €</p>
+<div class="mt-6 text-center">
+    <h3 class="font-semibold">Charge estimée :</h3>
+    <p class="text-xl text-orange-600 font-bold">
+        {{ prediction.predicted_charge|floatformat:2 }} ± {{ rmse|floatformat:2 }} €
+    </p>
+</div>
 {% endif %}
+
 {% endblock %}

@@ -1,41 +1,56 @@
-{% load static tailwind_tags %}
+{% load tailwind_tags %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}AssurPredict{% endblock %}</title>
+    {% tailwind_css %}
 </head>
-<body>
 
-    <!-- HEADER -->
-    <header>
-        <h1>AssurPredict</h1>
-        <nav>
-            <a href="/">Accueil</a>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+<!-- HEADER -->
+<header class="bg-green-600 text-white shadow">
+    <div class="max-w-5xl mx-auto flex justify-between items-center p-4">
+
+        <h1 class="text-2xl font-bold">
+            AssurPredict
+        </h1>
+
+        <nav class="space-x-4 text-sm">
+            <a href="/" class="hover:underline">Accueil</a>
 
             {% if user.is_authenticated %}
                 <span>Bonjour {{ user.username }}</span>
-                <a href="{% url 'logout' %}">Déconnexion</a>
+                <a href="{% url 'logout' %}" class="bg-white text-gray-600 px-3 py-1 rounded hover:bg-gray-100">
+                    Déconnexion
+                </a>
             {% else %}
-                <a href="{% url 'login' %}">Se connecter</a>
+                <a href="{% url 'login' %}" class="bg-white text-gray-600 px-3 py-1 rounded hover:bg-gray-100">
+                    Se connecter
+                </a>
             {% endif %}
         </nav>
-        <hr>
-        {% tailwind_css %}
-    </header>
 
-    <!-- CONTENU DES PAGES -->
-    <main>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="flex-1 flex items-center justify-center">
+
+    <div class="bg-white w-full max-w-xl rounded-xl shadow-lg p-8">
+
         {% block content %}
         {% endblock %}
-    </main>
 
-    <!-- FOOTER -->
-    <footer>
-        <hr>
-        <p>© 2026 – AssurPredict</p>
-    </footer>
+    </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="text-center text-gray-500 text-sm p-4">
+    © 2026 – AssurPredict
+</footer>
 
 </body>
 </html>
-
