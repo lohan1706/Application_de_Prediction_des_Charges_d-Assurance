@@ -22,9 +22,11 @@
 
             {% if user.is_authenticated %}
                 <span>Bonjour {{ user.username }}</span>
-                <a href="{% url 'logout' %}" class="bg-white text-gray-600 px-3 py-1 rounded hover:bg-gray-100">
-                    Déconnexion
-                </a>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Déconnexion</button>
+                </form>
+
             {% else %}
                 <a href="{% url 'login' %}" class="bg-white text-gray-600 px-3 py-1 rounded hover:bg-gray-100">
                     Se connecter
