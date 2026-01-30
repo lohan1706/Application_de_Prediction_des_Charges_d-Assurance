@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "daisyui";
 
 /**
   * A catch-all path to Django template files, JavaScript, and Python files
@@ -7,4 +8,7 @@
   * If your final CSS file is not being updated after code changes, you may want to broaden or narrow
   * the scope of this path.
   */
+@theme {
+  --color-sarah: #FA9078;
+}
 @source "../../../**/*.{html,py,js}";
