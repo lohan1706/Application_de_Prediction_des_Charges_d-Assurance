@@ -14,9 +14,9 @@
 
             {% if user.is_authenticated %}
                 <span>Bonjour {{ user.username }}</span>
-                <a href="/logout/">Déconnexion</a>
+                <a href="{% url 'logout' %}">Déconnexion</a>
             {% else %}
-                <a href="/auth/">S’identifier / Créer un compte</a>
+                <a href="{% url 'login' %}">Se connecter</a>
             {% endif %}
         </nav>
         <hr>
