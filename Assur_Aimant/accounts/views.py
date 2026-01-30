@@ -3,13 +3,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from django.contrib import messages
-
+from django.contrib.auth import get_user_model
+from .forms import CustomUserCreationForm
 
 class SignupView(CreateView):
     """
     Vue d'inscription utilisateur
-    """
-    form_class = UserCreationForm
+    """   
+    form_class = CustomUserCreationForm
     template_name = "accounts/signup.html"
     success_url = reverse_lazy("login")
 
