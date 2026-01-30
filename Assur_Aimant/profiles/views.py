@@ -16,7 +16,18 @@ class ProfileView(UpdateView):
     success_url = reverse_lazy("profile")
 
     def get_object(self):
-        return self.request.user.profile
+        profile, created = Profile.objects.get_or_create(
+        user=self.request.user,
+        defaults={
+            "age": 18,
+            "sex": "male",
+            "bmi": 20,
+            "children": 0,
+            "smoker": False,
+            "region": "northwest",
+        }
+        )
+        return profile
 
     def form_valid(self, form):
         profile = form.save()
