@@ -1,45 +1,58 @@
 from django import forms
 from .models import Profile
 
-# Gardez votre ProfileForm existant
+
+SEX_CHOICES = [
+    ("male", "Male"),
+    ("female", "Female"),
+]
+
+REGION_CHOICES = [
+    ("northwest", "Northwest"),
+    ("northeast", "Northeast"),
+    ("southwest", "Southwest"),
+    ("southeast", "Southeast"),
+]
+
+SMOKER_CHOICES = [
+    (True, "Oui"),
+    (False, "Non"),
+]
+
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['age', 'sex', 'bmi', 'children', 'smoker', 'region']
-        # ... votre configuration existante
 
-# NOUVEAU : Ajoutez ce formulaire
-class PredictionForm(forms.Form):
-    """Formulaire pour faire une prédiction sans modifier le profil"""
-    age = forms.IntegerField(
-        label='Âge',
-        min_value=18,
-        max_value=100,
-    )
-    sex = forms.ChoiceField(
-        label='Sexe',
-        choices=[('male', 'Homme'), ('female', 'Femme')],
-    )
-    bmi = forms.FloatField(
-        label='IMC (Indice de Masse Corporelle)',
-        min_value=10,
-        max_value=60,
-    )
-    children = forms.IntegerField(
-        label='Nombre d\'enfants',
-        min_value=0,
-        max_value=10,
-    )
-    smoker = forms.BooleanField(
-        label='Fumeur',
-        required=False,
-    )
-    region = forms.ChoiceField(
-        label='Région',
-        choices=[
-            ('northwest', 'Nord-Ouest'),
-            ('northeast', 'Nord-Est'),
-            ('southwest', 'Sud-Ouest'),
-            ('southeast', 'Sud-Est'),
-        ],
-    )
+        labels = {
+            'age': 'Âge',
+            'sex': 'Sexe',
+            'bmi': 'IMC',
+            'children': "Nombre d'enfants",
+            'smoker': 'Fumeur',
+            'region': 'Région',
+        }
+
+        widgets = {
+            'age': forms.NumberInput(attrs={'class': 'form-control'}),
+
+            'sex': forms.Select(
+                choices=SEX_CHOICES,
+                attrs={'class': 'form-control'}
+            ),
+
+            'bmi': forms.NumberInput(attrs={'class': 'form-control'}),
+
+            'children': forms.NumberInput(attrs={'class': 'form-control'}),
+
+            'smoker': forms.Select(
+                choices=SMOKER_CHOICES,
+                attrs={'class': 'form-control'}
+            ),
+
+            'region': forms.Select(
+                choices=REGION_CHOICES,
+                attrs={'class': 'form-control'}
+            ),
+        }
