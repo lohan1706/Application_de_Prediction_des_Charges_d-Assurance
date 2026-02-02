@@ -21,7 +21,10 @@
             <a href="/" class="bg-white text-ORANGE px-3 py-1 rounded hover:bg-gray-100 font-bold text-xl">Accueil</a>
 
             {% if user.is_authenticated %}
-                <span>Bonjour {{ user.username }}</span>
+                
+                <a href="{% url 'profile' %}" class="bg-white text-ORANGE px-3 py-1 rounded hover:bg-gray-100 font-bold text-xl">
+                    {{user.username}}
+                </a>
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
                     <button type="submit" class="bg-white text-ORANGE px-3 py-1 rounded hover:bg-gray-100 font-bold text-xl">Déconnexion</button>
