@@ -8,14 +8,14 @@
     {% csrf_token %}
     {{ form.as_p }}
 
-    <button type="submit">
+    <button type="submit" class="bg-white text-gray-600 px-3 py-1 rounded hover:bg-gray-100">
       Se connecter
     </button>
   </form>
 
   <p>
     Pas encore de compte ?
-    <a href="{% url 'signup' %}">Créer un compte</a>
+    <a href="{% url 'signup' %}"class="bg-white text-gray-600 px-3 py-1 rounded hover:bg-gray-100">Créer un compte</a>
   </p>
 </div>
 {% endblock %}
