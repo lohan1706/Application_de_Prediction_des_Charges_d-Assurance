@@ -1,21 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="flex items-center justify-center min-h-[70vh]">
-    <div class="bg-white p-8 rounded-lg shadow-lg border-4 border-ORANGE w-full max-w-md mx-4">
-        <h2 class="text-2xl font-bold text-center mb-6 text-GRIS">Connexion</h2>
-        <form method="post">
-            {% csrf_token %}
-            <div class="mb-4">
-                {{ form.as_p }}
-            </div>
-            <button type="submit" class="w-full bg-IVOIRE hover:bg-orange-600 text-ORANGE font-bold py-3 px-4 rounded mt-4">
-                Se connecter
-            </button>
-        </form>
-        <p class="text-center mt-6 text-GRIS">
-            Pas encore de compte ?
-            <a href="{% url 'signup' %}" class="text-ORANGE hover:text-orange-600 font-semibold underline">Créer un compte</a>
-        </p>
-    </div>
+<div>
+  <h2>Connexion</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="bg-white text-gray-600 px-3 py-1 rounded hover:bg-gray-100">
+      Se connecter
+    </button>
+  </form>
+
+  <p>
+    Pas encore de compte ?
+    <a href="{% url 'signup' %}"class="bg-white text-gray-600 px-3 py-1 rounded hover:bg-gray-100">Créer un compte</a>
+  </p>
 </div>
 {% endblock %}
