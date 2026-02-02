@@ -9,6 +9,20 @@
   * the scope of this path.
   */
 @theme {
-  --color-sarah: #FA9078;
+  --color-ORANGE: #FA9078;
 }
+
+@theme {
+  --color-IVOIRE: #FFFFF4;
+
+}
+
+@theme{
+  --color-VERT: #8BD593;
+}
+
+@theme{
+  --color-GRIS: #516060;
+}
+
 @source "../../../**/*.{html,py,js}";
