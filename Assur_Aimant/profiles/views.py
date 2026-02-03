@@ -1,15 +1,12 @@
 from django.views.generic import UpdateView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from .models import Profile
-from .forms import ProfileForm
-
-from assur_predict.views import model, rmse
-from assur_predict.models import Prediction
-
-import pandas as pd
+from .forms import ProfileForm, UserPersonalInfoForm
 
 
-class ProfileView(UpdateView):
+class ProfileView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = ProfileForm
     template_name = "profiles/profile.html"
@@ -17,46 +14,32 @@ class ProfileView(UpdateView):
 
     def get_object(self):
         profile, created = Profile.objects.get_or_create(
-        user=self.request.user,
-        defaults={
-            "age": 18,
-            "sex": "male",
-            "bmi": 20,
-            "children": 0,
-            "smoker": False,
-            "region": "northwest",
-        }
+            user=self.request.user,
+            defaults={
+                "age": 18,
+                "sex": "male",
+                "bmi": 20.0,
+                "children": 0,
+                "smoker": False,
+                "region": "northwest",
+            }
         )
         return profile
 
-    def form_valid(self, form):
-        profile = form.save()
-
-        data = {
-            "age": profile.age,
-            "sex": profile.sex,
-            "bmi": profile.bmi,
-            "children": profile.children,
-            "smoker": "yes" if profile.smoker else "no",
-            "region": profile.region,
-        }
-
-        df = pd.DataFrame([data])
-        result = model.predict(df)[0]
-
-        Prediction.objects.create(
-            user=profile.user,
-            predicted_charge=float(result)
-        )
-
-        return super().form_valid(form)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        last_pred = Prediction.objects.filter(
-            user=self.request.user
-        ).last()
-        context["prediction"] = last_pred
-        context["rmse"] = rmse
-
+        if 'user_form' not in context:
+            context['user_form'] = UserPersonalInfoForm(instance=self.request.user)
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        user_form = UserPersonalInfoForm(request.POST, instance=request.user)
+        
+        if form.is_valid() and user_form.is_valid():
+            user_form.save()
+            messages.success(request, 'Profil mis à jour avec succès!')
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)

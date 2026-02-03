@@ -29,6 +29,8 @@ urlpatterns = [
     path("", include("accounts.urls")),
     path("", include("profiles.urls")),
     path('', include('assur_predict.urls')),
+    path("", include("prediction.urls")),
+
 ]
 
 if settings.DEBUG:

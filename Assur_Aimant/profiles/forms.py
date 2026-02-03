@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile
+from .models import Profile, CustomUser
 
 
 SEX_CHOICES = [
@@ -19,6 +19,22 @@ SMOKER_CHOICES = [
     (False, "Non"),
 ]
 
+class UserPersonalInfoForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'email']
+        
+        labels = {
+            'first_name': 'Prénom',
+            'last_name': 'Nom',
+            'email': 'Email',
+        }
+        
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -42,7 +58,7 @@ class ProfileForm(forms.ModelForm):
                 attrs={'class': 'form-control'}
             ),
 
-            'bmi': forms.NumberInput(attrs={'class': 'form-control'}),
+            'bmi': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
 
             'children': forms.NumberInput(attrs={'class': 'form-control'}),
 
