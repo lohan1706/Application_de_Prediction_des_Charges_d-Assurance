@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator
 
 class CustomUser(AbstractUser):
     #     ROLE_CHOICES = [
@@ -18,7 +19,9 @@ class CustomUser(AbstractUser):
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
-    age = models.IntegerField()
+    age = models.IntegerField(
+        validators=[MinValueValidator(18)]
+    )
     sex = models.CharField(max_length=10)
     bmi = models.FloatField()
     children = models.IntegerField()
