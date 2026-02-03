@@ -24,7 +24,7 @@ class Profile(models.Model):
     )
     sex = models.CharField(max_length=10)
     bmi = models.FloatField()
-    children = models.IntegerField()
+    children = models.IntegerField(validators=[MinValueValidator(0)])
     smoker = models.BooleanField()
     region = models.CharField(max_length=50)
 
