@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-[70vh]">
+    <div class="bg-white p-8 rounded-lg shadow-lg border-4 border-ORANGE w-full max-w-md mx-4 pb-[100px]">
+        <h2 class="text-2xl font-bold text-center mb-6 text-GRIS">Prédiction de Prime</h2>
+        
+        {% if not profile %}
+        <div class="text-center mb-6">
+            <p class="text-GRIS mb-4">Veuillez compléter votre profil avant de faire une prédiction.</p>
+            <a href="{% url 'profile' %}" 
+               class="w-full bg-IVOIRE hover:bg-orange-600 text-ORANGE font-bold py-3 px-4 rounded transition duration-200 inline-block">
+                Compléter mon profil
+            </a>
+        </div>
+        {% else %}
+        
+        <form method="post">
+            {% csrf_token %}
+            <button 
+                type="submit"
+                class="w-full bg-VERT hover:bg-orange-600 text-white font-bold py-3 px-4 rounded transition duration-200 mb-4">
+                Calculer ma prime
+            </button>
+        </form>
+
+        {% if prediction %}
+        <div class="mt-6 pt-4 border-t border-GRIS border-opacity-20">
+            <h3 class="font-semibold text-GRIS text-center mb-2">Charge estimée :</h3>
+            <p class="text-xl font-bold text-ORANGE text-center">
+                {% if show_rmse %}
+                    {{ prediction.predicted_charge|floatformat:2 }} ± {{ rmse|floatformat:2 }} €
+                {% else %}
+                    {{ prediction.predicted_charge|floatformat:2 }} €
+                {% endif %}
+</p>
+        </div>
+        {% endif %}
+
+        {% if history %}
+        <div class="mt-6 pt-4 border-t border-GRIS border-opacity-20">
+            <h3 class="font-semibold text-GRIS text-center mb-2">Historique :</h3>
+            <div class="space-y-2">
+                {% for pred in history %}
+                <div class="flex justify-between text-sm text-GRIS">
+                    <span>{{ pred.predicted_charge|floatformat:2 }} €</span>
+                    <span>{{ pred.created_at|date:"d/m/Y H:i" }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="mt-6 pt-4 border-t border-GRIS border-opacity-20">
+            <a href="{% url 'profile' %}" 
+               class="block w-full bg-IVOIRE hover:bg-orange-600 text-ORANGE text-center font-bold py-3 px-4 rounded transition duration-200">
+                Modifier mon profil
+            </a>
+        </div>
+
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

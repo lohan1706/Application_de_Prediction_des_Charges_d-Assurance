@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "accounts",
     "assur_predict",
     "profiles",
+    "prediction",
 
     "theme",
     "tailwind",
