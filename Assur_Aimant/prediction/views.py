@@ -18,24 +18,20 @@ class PredictView(LoginRequiredMixin, TemplateView):
             profile = Profile.objects.get(user=self.request.user)
             context["profile"] = profile
             
-            # Adicionar formulário do profile
             context["form"] = ProfileForm(instance=profile)
             
-            # Última predição
             last_prediction = Prediction.objects.filter(
                 user=self.request.user
             ).first()
             context["prediction"] = last_prediction
-            
-            # Histórico (últimas 5 predições)
+
             history = Prediction.objects.filter(
                 user=self.request.user
             )[:5]
             context["history"] = history
             
             context["rmse"] = rmse
-            
-            # Verificar se deve mostrar RMSE
+
             if last_prediction:
                 show_rmse = (last_prediction.predicted_charge - rmse) >= 1000
                 context["show_rmse"] = show_rmse
@@ -69,11 +65,9 @@ class PredictView(LoginRequiredMixin, TemplateView):
                     "region": profile.region,
                 }
 
-                # Faire predição
                 df = pd.DataFrame([data])
                 result = model.predict(df)[0]
 
-                # Salvar predição
                 Prediction.objects.create(
                     user=request.user,
                     predicted_charge=float(result)
@@ -82,7 +76,6 @@ class PredictView(LoginRequiredMixin, TemplateView):
                 messages.success(request, "Profil mis à jour et prédiction effectuée!")
             else:
                 messages.error(request, "Veuillez corriger les erreurs dans le formulaire")
-                # Retornar contexto com erros
                 context = self.get_context_data()
                 context['form'] = form
                 return self.render_to_response(context)
@@ -94,6 +87,6 @@ class PredictView(LoginRequiredMixin, TemplateView):
             )
         except Exception as e:
             messages.error(request, f"Erreur lors de la prédiction: {str(e)}")
-
-        # Redirecionar para a mesma página (GET)
+            
+        # ✅ CORREÇÃO: Adicionar return aqui!
         return self.get(request, *args, **kwargs)
