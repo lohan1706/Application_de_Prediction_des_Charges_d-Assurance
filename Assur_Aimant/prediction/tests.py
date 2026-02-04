@@ -72,7 +72,7 @@ class PredictView(TestCase):
 
         self.profile = Profile.objects.create(
             user = self.user,
-            age=15,
+            age=30,
             sex='male',
             bmi=25.5,
             children=2,
@@ -230,6 +230,87 @@ class PredictView(TestCase):
         
         self.assertIn('profile', response.context)
         self.assertIn('rmse', response.context)
+
+    @patch('prediction.views.model')
+    def test_age_below_18_rejected(self, mock_model):
+        """Test : âge inférieur à 18 ans est rejeté"""
+        mock_model.predict.return_value = [1000.00]
+        self.client.login(username='testuser', password='password123')
+        # Données avec âge < 18
+        form_data = {
+        'age': 15, 
+        'sex': 'male',
+        'bmi': 25.5,
+        'children': 2,
+        'smoker': False,
+        'region': 'northwest'
+        }
+        # Faire POST
+        response = self.client.post(self.predict_url, data=form_data, follow=True)
+        # Le formulaire doit être invalide, donc pas de prédiction créée
+        self.assertEqual(Prediction.objects.filter(user=self.user).count(), 0)
+        # Vérifier que le message d'erreur est affiché
+        self.assertContains(response, "Veuillez corriger les erreurs")
+
+    @patch('prediction.views.model')
+    def test_age_18_accepted(self, mock_model):
+        """Test : âge exactement 18 ans est accepté"""
+        mock_model.predict.return_value = [1000.00]
+        self.client.login(username='testuser', password='password123')            # Données avec âge = 18
+        form_data = {
+        'age': 18,
+        'sex': 'male',
+        'bmi': 25.5,
+        'children': 2,
+        'smoker': False,
+        'region': 'northwest'
+        }
+        # Faire POST
+        response = self.client.post(self.predict_url, data=form_data, follow=True)
+        # La prédiction doit être créée
+        self.assertEqual(Prediction.objects.filter(user=self.user).count(), 1)
+        self.assertContains(response, "Profil mis à jour et prédiction effectuée")
+    
+    @patch('prediction.views.model')
+    def test_negative_children_rejected(self, mock_model):
+        """Test : nombre d'enfants négatif est rejeté"""
+        mock_model.predict.return_value = [1000.00]
+        self.client.login(username='testuser', password='password123')
+        # Données avec children négatif
+        form_data = {
+        'age': 30,
+        'sex': 'male',
+        'bmi': 25.5,
+        'children': -1, 
+        'smoker': False,
+        'region': 'northwest'
+        }
+        # Faire POST
+        response = self.client.post(self.predict_url, data=form_data, follow=True)
+        # Le formulaire doit être invalide, donc pas de prédiction créée
+        self.assertEqual(Prediction.objects.filter(user=self.user).count(), 0)
+        # Vérifier que le message d'erreur est affiché
+        self.assertContains(response, "Veuillez corriger les erreurs")
+
+    @patch('prediction.views.model')
+    def test_zero_children_accepted(self, mock_model):
+        """Test : zéro enfant est accepté"""
+        mock_model.predict.return_value = [1000.00]
+        self.client.login(username='testuser', password='password123')
+        # Données avec children = 0
+        form_data = {
+        'age': 30,
+        'sex': 'male',
+        'bmi': 25.5,
+        'children': 0, 
+        'smoker': False,
+        'region': 'northwest'
+        }
+        # Faire POST
+        response = self.client.post(self.predict_url, data=form_data, follow=True)
+        # La prédiction doit être créée
+        self.assertEqual(Prediction.objects.filter(user=self.user).count(), 1)
+        self.assertContains(response, "Profil mis à jour et prédiction effectuée")
 
 # ==================== TESTS D'INTÉGRATION ====================
 
