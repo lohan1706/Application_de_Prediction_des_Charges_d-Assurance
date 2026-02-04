@@ -3,15 +3,15 @@ from .models import Profile, CustomUser
 
 
 SEX_CHOICES = [
-    ("male", "Male"),
-    ("female", "Female"),
+    ("male", "Masculin"),
+    ("female", "Féminin"),
 ]
 
 REGION_CHOICES = [
-    ("northwest", "Northwest"),
-    ("northeast", "Northeast"),
-    ("southwest", "Southwest"),
-    ("southeast", "Southeast"),
+    ("northwest", "Nord-ouest"),
+    ("northeast", "Nord-est"),
+    ("southwest", "Sud-ouest"),
+    ("southeast", "Sud-est"),
 ]
 
 SMOKER_CHOICES = [
@@ -39,14 +39,14 @@ class UserPersonalInfoForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['age', 'sex', 'height', 'weight', 'bmi', 'children', 'smoker', 'region']
+        fields = ['age', 'sex', 'height', 'weight', 'children', 'smoker', 'region']
 
         labels = {
             'age': 'Âge',
             'sex': 'Sexe',
             'height': 'Taille (m)',
             'weight': 'Poids (kg)',
-            'bmi': 'IMC',
+            # 'bmi': 'IMC',
             'children': "Nombre d'enfants",
             'smoker': 'Fumeur',
             'region': 'Région',
@@ -58,7 +58,7 @@ class ProfileForm(forms.ModelForm):
             'height': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
             'weight': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
             'bmi': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
-            'children': forms.NumberInput(attrs={'class': 'form-control'}),
+            # 'children': forms.NumberInput(attrs={'class': 'form-control'}),
             'smoker': forms.Select(choices=SMOKER_CHOICES, attrs={'class': 'form-control'}),
             'region': forms.Select(choices=REGION_CHOICES, attrs={'class': 'form-control'}),
         }

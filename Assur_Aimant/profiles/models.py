@@ -21,8 +21,8 @@ class Profile(models.Model):
 
     age = models.IntegerField(validators=[MinValueValidator(18)])
     sex = models.CharField(max_length=10)
-    height = models.FloatField(help_text="Taille en mètres")  # ajout de la taille
-    weight = models.FloatField(help_text="Poids en kg")       # ajout du poids
+    height = models.FloatField(help_text="Taille en mètres", validators=[MinValueValidator(0)])  # ajout de la taille
+    weight = models.FloatField(help_text="Poids en kg", validators=[MinValueValidator(0)])       # ajout du poids
     bmi = models.FloatField(blank=True)                        # IMC calculé automatiquement
     children = models.IntegerField(validators=[MinValueValidator(0)])
     smoker = models.BooleanField()
