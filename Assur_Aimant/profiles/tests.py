@@ -19,7 +19,6 @@ class UserModelTest(TestCase):
             username="etudiante",
             password="Password123!"
             
-
         )
 
         # essayer de créer un utilisateur avec le même username
