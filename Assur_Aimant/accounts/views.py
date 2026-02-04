@@ -35,3 +35,7 @@ class CustomLogoutView(LogoutView):
     Vue de déconnexion utilisateur
     """
     next_page = reverse_lazy("login")
+
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, "Vous êtes bien déconnecté.")
+        return super().dispatch(request, *args, **kwargs)
