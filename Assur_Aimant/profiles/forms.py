@@ -39,11 +39,13 @@ class UserPersonalInfoForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['age', 'sex', 'bmi', 'children', 'smoker', 'region']
+        fields = ['age', 'sex', 'height', 'weight', 'bmi', 'children', 'smoker', 'region']
 
         labels = {
             'age': 'Âge',
             'sex': 'Sexe',
+            'height': 'Taille (m)',
+            'weight': 'Poids (kg)',
             'bmi': 'IMC',
             'children': "Nombre d'enfants",
             'smoker': 'Fumeur',
@@ -52,23 +54,11 @@ class ProfileForm(forms.ModelForm):
 
         widgets = {
             'age': forms.NumberInput(attrs={'class': 'form-control'}),
-
-            'sex': forms.Select(
-                choices=SEX_CHOICES,
-                attrs={'class': 'form-control'}
-            ),
-
-            'bmi': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
-
+            'sex': forms.Select(choices=SEX_CHOICES, attrs={'class': 'form-control'}),
+            'height': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'weight': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
+            'bmi': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
             'children': forms.NumberInput(attrs={'class': 'form-control'}),
-
-            'smoker': forms.Select(
-                choices=SMOKER_CHOICES,
-                attrs={'class': 'form-control'}
-            ),
-
-            'region': forms.Select(
-                choices=REGION_CHOICES,
-                attrs={'class': 'form-control'}
-            ),
+            'smoker': forms.Select(choices=SMOKER_CHOICES, attrs={'class': 'form-control'}),
+            'region': forms.Select(choices=REGION_CHOICES, attrs={'class': 'form-control'}),
         }

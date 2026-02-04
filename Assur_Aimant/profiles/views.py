@@ -39,6 +39,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         
         if form.is_valid() and user_form.is_valid():
             user_form.save()
+            form.save()  # calcule automatiquement le bmi
             messages.success(request, 'Profil mis à jour avec succès!')
             return self.form_valid(form)
         else:
