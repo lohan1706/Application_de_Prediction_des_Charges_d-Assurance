@@ -75,7 +75,7 @@ class ProfileForm(forms.ModelForm):
             'sex': forms.Select(choices=SEX_CHOICES, attrs={'class': 'form-control'}),
             'height': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
             'weight': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
-            'children': forms.NumberInput(attrs={'class': 'form-control'}),
+            'children': forms.NumberInput(attrs={'class': 'form-control'}), 
             'region': forms.Select(choices=REGION_CHOICES, attrs={'class': 'form-control'}),
         }
     
