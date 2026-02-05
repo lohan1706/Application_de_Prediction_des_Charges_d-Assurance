@@ -1,10 +1,29 @@
 {% extends 'base.html' %}
 {% load static %}  
 {% block title %}Accueil{% endblock %}
- {% block content %}
-    <h2>{{ titre }}</h2>
 
+{% block content %}
+<div class="text-lg">  
 
-    <p>Prédiction intelligente de primes d’assurance grâce à l’IA.</p>
+    <p class="underline decoration-red-500 font-bold text-2xl mt-4">
+        Présentation de l’application :
+    </p>
+    <p>
+    AssurPredict est une application web intelligente conçue pour aider les utilisateurs à anticiper le coût de leurs futures charges d’assurance santé.
+    Grâce à un modèle de machine learning entraîné sur des données réelles, l’application analyse des informations personnelles telles que l’âge, le sexe, le tabagisme, la région ou encore le nombre d’enfants afin d’estimer avec précision le montant probable de l’assurance.
+
+    L’objectif principal d’AssurPredict est de simplifier la compréhension des dépenses d’assurance pour tous les profils d’utilisateurs, même ceux qui ne sont pas familiers avec le domaine.
+    L’interface est pensée pour être intuitive : il suffit de remplir un formulaire clair et rapide, puis l’application génère instantanément une prédiction personnalisée, accompagnée d’une visualisation lisible et de conseils éventuels.
+    </p>
     <img src="{% static 'image/logo.png' %}" alt="Logo AssurPredict">
+
+    <p class="underline decoration-red-500 font-bold text-2xl mt-6">
+        Objectif et mode d’utilisation :
+    </p>
+    <p>
+        L’utilisateur se connecte ou se crée un compte, remplit un formulaire simple, et l’application génère instantanément 
+        une prédiction personnalisée du coût de son assurance.
+    </p>
+
+</div>
 {% endblock %}
