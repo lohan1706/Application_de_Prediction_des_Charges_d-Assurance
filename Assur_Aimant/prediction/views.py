@@ -88,7 +88,7 @@ class PredictView(LoginRequiredMixin, TemplateView):
         except Exception as e:
             messages.error(request, f"Erreur lors de la prédiction: {str(e)}")
             
-        # ✅ CORREÇÃO: Adicionar return aqui!
+        
         return self.get(request, *args, **kwargs)
     
     

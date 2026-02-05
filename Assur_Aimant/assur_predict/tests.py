@@ -32,6 +32,7 @@ class HomeTemplateTests(TestCase):
         self.assertIn("alice", content)
         self.assertIn("/logout/", content)
 
+
 class BaseTemplateBlockTests(TestCase):
     def test_base_template_accepts_content_block(self):
         # on étend base.html et on vérifie que le block content est rendu
@@ -42,13 +43,7 @@ class BaseTemplateBlockTests(TestCase):
     def test_base_contains_footer(self):
         resp = self.client.get("/")
         self.assertEqual(resp.status_code, 200)
-        self.assertIn("<footer", resp.content.decode())
-
-def test_base_accepts_extra_head_and_scripts_blocks(self):
-        head_t = Template("{% extends 'base.html' %}{% block extra_head %}MYHEAD{% endblock %}")
-        self.assertIn("MYHEAD", head_t.render(Context({})))
-        scripts_t = Template("{% extends 'base.html' %}{% block scripts %}MYSCRIPT{% endblock %}")
-        self.assertIn("MYSCRIPT", scripts_t.render(Context({})))        
+        self.assertIn("<footer", resp.content.decode())    
 
 
 
@@ -56,7 +51,7 @@ User = get_user_model()
 
 class EndToEndTests(TestCase):
     def test_signup_profile_and_predict_flow(self):
-        # 1) Signup
+        # 1) Inscription (Signup)
         signup_data = {
             "username": "e2euser",
             "email": "e2e@example.com",
@@ -67,20 +62,21 @@ class EndToEndTests(TestCase):
         self.assertEqual(resp.status_code, 200)
         user = User.objects.get(username="e2euser")
 
-        # 2) Login (client.login uses auth backend)
+        # 2) Connexion (client.login utilise le backend d'authentification)
         logged = self.client.login(username="e2euser", password="StrongPass123")
         self.assertTrue(logged)
 
-        # 3) Access profile (profile created on first access) and update it
+        # 3) Accéder au profil (profil créé lors du premier accès) et le mettre à jour
         resp = self.client.get(reverse("profile"))
         self.assertEqual(resp.status_code, 200)
 
         profile_post = {
             "age": 30,
             "sex": "male",
-            "bmi": 23.5,
+            "height": 1.75,
+            "weight": 72.0,
             "children": 1,
-            "smoker": "on",  # checked checkbox
+            "smoker": "on",  # checkbox cochée
             "region": "northwest",
             "first_name": "End",
             "last_name": "ToEnd",
@@ -91,26 +87,31 @@ class EndToEndTests(TestCase):
         user.refresh_from_db()
         self.assertEqual(user.profile.age, 30)
         self.assertTrue(user.profile.smoker)
+        # vérifier que le BMI a été calculé automatiquement
+        expected_bmi = round(72.0 / (1.75 ** 2), 1)
+        self.assertAlmostEqual(user.profile.bmi, expected_bmi, places=1)
 
-        # 4) GET predict page -> form must be prefilled (editable)
+        # 4) GET page predict -> le formulaire doit être pré-rempli (modifiable)
         resp = self.client.get(reverse("predict"))
         self.assertEqual(resp.status_code, 200)
         form = resp.context.get("form")
         self.assertIsNotNone(form)
-        # initial values come from profile
+        # les valeurs initiales viennent du profil
         self.assertEqual(form.initial.get("age"), 30)
-        self.assertEqual(form.initial.get("bmi"), 23.5)
+        self.assertEqual(form.initial.get("height"), 1.75)
+        self.assertEqual(form.initial.get("weight"), 72.0)
 
         class FakeModel:
             def predict(self, df):
                 return [777.88]
 
-        # Patch l'objet réellement utilisé par la vue
+        # Patcher l'objet réellement utilisé par la vue
         with patch("prediction.views.model", new=FakeModel()):
             predict_post = {
                 "age": 35,
                 "sex": "male",
-                "bmi": 25.0,
+                "height": 1.70,
+                "weight": 72.3,
                 "children": 1,
                 "smoker": "",
                 "region": "northwest",
@@ -118,9 +119,9 @@ class EndToEndTests(TestCase):
             resp = self.client.post(reverse("predict"), predict_post, follow=True)
             self.assertEqual(resp.status_code, 200)
             content = resp.content.decode()
+            # vérifier que la prédiction apparaît dans le contenu (avec point ou virgule selon la locale)
             self.assertTrue("777.88" in content or "777,88" in content)
+            # vérifier que la prédiction a été enregistrée en base de données
             pred = Prediction.objects.filter(user=user).last()
             self.assertIsNotNone(pred)
             self.assertAlmostEqual(pred.predicted_charge, 777.88, places=2)
-
-

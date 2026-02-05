@@ -45,4 +45,6 @@ class ProfileView(LoginRequiredMixin, UpdateView):
             messages.success(request, 'Profil mis à jour avec succès!')
             return self.form_valid(form)
         else:
-            return self.form_invalid(form)
+            # Pass both forms to template when there's an error
+            context = self.get_context_data(form=form, user_form=user_form)
+            return self.render_to_response(context)

@@ -8,7 +8,11 @@
     <div class="bg-IVOIRE border-4 border-ORANGE rounded-lg shadow-lg p-8 w-full max-w-md">
         <h2 class="text-2xl font-bold text-GRIS text-center mb-6">Connexion</h2>
 
-        {% if form.errors %}
+       {% if form.non_field_errors %}
+        <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+            {{ form.non_field_errors }}
+        </div>
+        {% elif form.errors %}
         <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
             Veuillez corriger les erreurs ci-dessous.
         </div>
