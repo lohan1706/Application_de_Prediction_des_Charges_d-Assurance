@@ -18,6 +18,8 @@ class ProfileView(LoginRequiredMixin, UpdateView):
             defaults={
                 "age": 18,
                 "sex": "male",
+                "height": 1.70,
+                "weight": 60.0,
                 "bmi": 20.0,
                 "children": 0,
                 "smoker": False,

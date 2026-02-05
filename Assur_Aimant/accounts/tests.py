@@ -85,3 +85,33 @@ class LogoutViewTests(TestCase):
         # redirection finale vers login
         self.assertRedirects(response, reverse("login"))
 
+
+class PasswordHashingTest(TestCase):
+    """Tests de hachage des mots de passe"""
+    
+    def test_password_is_hashed(self):
+        """Test: le mot de passe est haché, pas en clair"""
+        user = User.objects.create_user(
+            username='testuser',
+            password='plainpassword123'
+        )
+        
+        # Le mot de passe NE doit PAS être en clair
+        self.assertNotEqual(user.password, 'plainpassword123')
+        
+        # Le mot de passe doit commencer par l'algorithme
+        self.assertTrue(user.password.startswith('pbkdf2_sha256$'))
+    
+    def test_password_verification_works(self):
+        """Test: la vérification du mot de passe fonctionne"""
+        user = User.objects.create_user(
+            username='testuser',
+            password='mypassword'
+        )
+        
+        # Le bon mot de passe doit être accepté
+        self.assertTrue(user.check_password('mypassword'))
+        
+        # Un mauvais mot de passe doit être rejeté
+        self.assertFalse(user.check_password('wrongpassword'))
+
