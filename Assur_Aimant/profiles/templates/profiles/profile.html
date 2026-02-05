@@ -1,48 +1,55 @@
 {% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}  
 
 {% block content %}
-<div class="flex items-center justify-center min-h-[70vh]">
-    <div class="bg-IVOIRE p-8 rounded-lg shadow-lg border-4 border-ORANGE w-full max-w-md mx-4 pb-[100px]">
-        <h2 class="text-2xl font-bold text-center mb-6 text-GRIS">Votre profil</h2>
-        
-        <form method="post">
-            {% csrf_token %}
-            
-            <div class="space-y-4 mb-6">
-                {% for field in user_form %}
-                <div class="w-full">
-                    <label class="block text-GRIS font-semibold mb-1 text-sm">
-                        {{ field.label }}
-                    </label>
-                    {{ field }}
-                    {% if field.errors %}
-                        <span class="text-red-500 text-xs">{{ field.errors }}</span>
-                    {% endif %}
-                </div>
-                {% endfor %}
+<div class="flex items-center justify-center min-h-[70vh] px-2 py-6">
+    <!-- Card profil -->
+    <div class="bg-IVOIRE rounded-xl shadow-md border-2 border-ORANGE w-full max-w-sm sm:max-w-md p-4 sm:p-6 md:p-8 transform transition duration-300 hover:scale-105 hover:shadow-2xl">
 
-                {% for field in form %}
-                <div class="w-full">
-                    <label class="block text-GRIS font-semibold mb-1 text-sm">
-                        {{ field.label }}
-                    </label>
-                    {{ field }}
-                    {% if field.errors %}
-                        <span class="text-red-500 text-xs">{{ field.errors }}</span>
-                    {% endif %}
-                </div>
-                {% endfor %}
+        <!-- Titre -->
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 text-GRIS text-center">Votre profil</h2>
+
+        <!-- Formulaire -->
+        <form method="post" class="space-y-4 sm:space-y-6 text-left">
+            {% csrf_token %}
+
+            <!-- Champs utilisateur -->
+            {% for field in user_form %}
+            <div class="w-full">
+                <label class="block text-GRIS font-semibold mb-1 sm:mb-2 text-sm sm:text-base">
+                    {{ field.label }}
+                </label>
+                {{ field|add_class:"w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ORANGE" }}
+                {% if field.errors %}
+                    <span class="text-red-500 text-xs sm:text-sm mt-1 block">{{ field.errors }}</span>
+                {% endif %}
             </div>
-            
-            <div class="space-y-3">
+            {% endfor %}
+
+            <!-- Champs supplémentaires -->
+            {% for field in form %}
+            <div class="w-full">
+                <label class="block text-GRIS font-semibold mb-1 sm:mb-2 text-sm sm:text-base">
+                    {{ field.label }}
+                </label>
+                {{ field|add_class:"w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ORANGE" }}
+                {% if field.errors %}
+                    <span class="text-red-500 text-xs sm:text-sm mt-1 block">{{ field.errors }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <!-- Boutons -->
+            <div class="space-y-3 mt-4">
                 <button 
                     type="submit"
-                    class="w-full bg-white hover:bg-orange-600 text-ORANGE font-bold py-3 px-4 rounded transition duration-200">
+                    class="w-full bg-ORANGE hover:bg-orange-600 text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition duration-200">
                     Enregistrer
                 </button>
-                
+
                 <a href="{% url 'predict' %}" 
-                   class="block w-full bg-ORANGE hover:bg-orange-600 text-ORANGE text-center font-bold py-3 px-4 rounded transition duration-200">
+                   class="block w-full bg-white border border-ORANGE hover:bg-ORANGE hover:text-white text-ORANGE text-center font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition duration-200">
                     Obtenir ma prédiction
                 </a>
             </div>

@@ -1,36 +1,42 @@
 {% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}  
 
 {% block content %}
-<div class="flex items-center justify-center min-h-[70vh]">
-    <div class="bg-white p-8 rounded-lg shadow-lg border-4 border-ORANGE w-full max-w-md mx-4 pb-[100px]">
-        <h2 class="text-2xl font-bold text-center mb-6 text-GRIS">Prédiction de Charges</h2>
-        
+<div class="flex items-center justify-center min-h-[70vh] px-2 py-6">
+    <!-- Card prediction -->
+    <div class="bg-IVOIRE rounded-xl shadow-md border-2 border-ORANGE w-full max-w-sm sm:max-w-md p-4 sm:p-6 md:p-8 transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+
+        <!-- Titre -->
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 text-GRIS text-center">Prédiction de Charges</h2>
+
         {% if not profile %}
         <div class="text-center mb-6">
             <p class="text-GRIS mb-4">Veuillez compléter votre profil avant de faire une prédiction.</p>
             <a href="{% url 'profile' %}" 
-               class="w-full bg-IVOIRE hover:bg-orange-600 text-ORANGE font-bold py-3 px-4 rounded transition duration-200 inline-block">
+               class="w-full bg-IVOIRE hover:bg-orange-600 text-ORANGE font-bold py-2 sm:py-3 px-3 sm:px-4 rounded transition duration-200 inline-block">
                 Compléter mon profil
             </a>
         </div>
         {% else %}
         
-        <!-- Formulaire éditable du profil -->
-        <form method="post">
+        <!-- Formulaire prédiction -->
+        <form method="post" class="space-y-4 sm:space-y-6 text-left">
             {% csrf_token %}
             
-            <div class="mb-6 p-4 bg-gray-50 rounded border border-gray-300">
-                <h3 class="font-semibold text-GRIS text-center mb-3">Vos informations :</h3>
+            <!-- Card Vos informations -->
+            <div class="mb-4 p-4 bg-IVOIRE rounded-lg border-2 border-ORANGE">
+                <h3 class="font-semibold text-GRIS text-left mb-3">Vos informations :</h3>
                 
                 <div class="space-y-3">
                     {% for field in form %}
                     <div>
-                        <label class="block text-GRIS font-semibold mb-1 text-xs">
+                        <label class="block text-GRIS font-semibold mb-1 text-sm sm:text-base">
                             {{ field.label }}
                         </label>
-                        {{ field }}
+                        {{ field|add_class:"w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ORANGE" }}
                         {% if field.errors %}
-                            <span class="text-red-500 text-xs">{{ field.errors }}</span>
+                            <span class="text-red-500 text-xs sm:text-sm mt-1 block">{{ field.errors }}</span>
                         {% endif %}
                     </div>
                     {% endfor %}
@@ -39,15 +45,16 @@
             
             <button 
                 type="submit"
-                class="w-full bg-VERT hover:bg-orange-600 text-white font-bold py-3 px-4 rounded transition duration-200 mb-4">
+                class="w-full bg-VERT hover:bg-orange-600 text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg transition duration-200">
                 Calculer mes charges
             </button>
         </form>
 
+        <!-- Résultat de la prédiction -->
         {% if prediction %}
-        <div class="mt-6 pt-4 border-t border-GRIS border-opacity-20">
-            <h3 class="font-semibold text-GRIS text-center mb-2">Charge estimée :</h3>
-            <p class="text-xl font-bold text-ORANGE text-center">
+        <div class="mt-4 sm:mt-6 pt-4 border-t border-GRIS border-opacity-20">
+            <h3 class="font-semibold text-GRIS text-left mb-2">Charge estimée :</h3>
+            <p class="text-xl font-bold text-ORANGE">
                 {% if show_rmse %}
                     {{ prediction.predicted_charge|floatformat:2 }} ± {{ rmse|floatformat:2 }} €
                 {% else %}
@@ -57,12 +64,13 @@
         </div>
         {% endif %}
 
+        <!-- Historique des prédictions -->
         {% if history %}
-        <div class="mt-6 pt-4 border-t border-GRIS border-opacity-20">
-            <h3 class="font-semibold text-GRIS text-center mb-2">Historique :</h3>
+        <div class="mt-4 sm:mt-6 pt-4 border-t border-GRIS border-opacity-20">
+            <h3 class="font-semibold text-GRIS text-left mb-2">Historique :</h3>
             <div class="space-y-2">
                 {% for pred in history %}
-                <div class="flex justify-between text-sm text-GRIS">
+                <div class="flex justify-between text-sm sm:text-base text-GRIS">
                     <span>{{ pred.predicted_charge|floatformat:2 }} €</span>
                     <span>{{ pred.created_at|date:"d/m/Y H:i" }}</span>
                 </div>
