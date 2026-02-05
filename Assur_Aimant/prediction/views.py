@@ -90,3 +90,6 @@ class PredictView(LoginRequiredMixin, TemplateView):
             
         # ✅ CORREÇÃO: Adicionar return aqui!
         return self.get(request, *args, **kwargs)
+    
+    
+   

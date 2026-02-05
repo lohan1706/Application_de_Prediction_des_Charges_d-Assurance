@@ -52,3 +52,75 @@ def test_base_accepts_extra_head_and_scripts_blocks(self):
 
 
 
+User = get_user_model()
+
+class EndToEndTests(TestCase):
+    def test_signup_profile_and_predict_flow(self):
+        # 1) Signup
+        signup_data = {
+            "username": "e2euser",
+            "email": "e2e@example.com",
+            "password1": "StrongPass123",
+            "password2": "StrongPass123",
+        }
+        resp = self.client.post(reverse("signup"), signup_data, follow=True)
+        self.assertEqual(resp.status_code, 200)
+        user = User.objects.get(username="e2euser")
+
+        # 2) Login (client.login uses auth backend)
+        logged = self.client.login(username="e2euser", password="StrongPass123")
+        self.assertTrue(logged)
+
+        # 3) Access profile (profile created on first access) and update it
+        resp = self.client.get(reverse("profile"))
+        self.assertEqual(resp.status_code, 200)
+
+        profile_post = {
+            "age": 30,
+            "sex": "male",
+            "bmi": 23.5,
+            "children": 1,
+            "smoker": "on",  # checked checkbox
+            "region": "northwest",
+            "first_name": "End",
+            "last_name": "ToEnd",
+            "email": "e2euser@example.com",
+        }
+        resp = self.client.post(reverse("profile"), profile_post, follow=True)
+        self.assertEqual(resp.status_code, 200)
+        user.refresh_from_db()
+        self.assertEqual(user.profile.age, 30)
+        self.assertTrue(user.profile.smoker)
+
+        # 4) GET predict page -> form must be prefilled (editable)
+        resp = self.client.get(reverse("predict"))
+        self.assertEqual(resp.status_code, 200)
+        form = resp.context.get("form")
+        self.assertIsNotNone(form)
+        # initial values come from profile
+        self.assertEqual(form.initial.get("age"), 30)
+        self.assertEqual(form.initial.get("bmi"), 23.5)
+
+        class FakeModel:
+            def predict(self, df):
+                return [777.88]
+
+        # Patch l'objet réellement utilisé par la vue
+        with patch("prediction.views.model", new=FakeModel()):
+            predict_post = {
+                "age": 35,
+                "sex": "male",
+                "bmi": 25.0,
+                "children": 1,
+                "smoker": "",
+                "region": "northwest",
+            }
+            resp = self.client.post(reverse("predict"), predict_post, follow=True)
+            self.assertEqual(resp.status_code, 200)
+            content = resp.content.decode()
+            self.assertTrue("777.88" in content or "777,88" in content)
+            pred = Prediction.objects.filter(user=user).last()
+            self.assertIsNotNone(pred)
+            self.assertAlmostEqual(pred.predicted_charge, 777.88, places=2)
+
+
