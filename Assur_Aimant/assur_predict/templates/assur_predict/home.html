@@ -22,7 +22,7 @@
 
     <!-- Contenu texte -->
     <div class="mt-6 text-lg max-w-5xl mx-auto px-4">
-        <p class="underline decoration-red-500 font-bold text-2xl mt-4">
+        <p class="text-ORANGE font-bold text-2xl mt-4">
             Bienvenue sur AssurPredict
         </p>
 
@@ -36,7 +36,7 @@
             Aucune connaissance technique n’est nécessaire : vous renseignez vos informations, nous nous chargeons du reste.
         </p>
 
-        <p class="underline decoration-red-500 font-bold text-2xl mt-6">
+        <p class=" text-ORANGE font-bold text-2xl mt-6">
             Comment ça fonctionne ?
         </p>
 
@@ -51,9 +51,10 @@
         <p class="mt-2">
             Vos données sont sécurisées et utilisées uniquement dans le cadre du calcul de votre estimation.
         </p>
-        <p class="mt-4 font-semibold">
-        Commencez dès maintenant et découvrez votre estimation en quelques secondes.
-        </p>
+       <a href="{% url 'signup' %}" 
+   class="inline-block mt-4 px-6 py-3 bg-ORANGE text-white font-semibold rounded shadow hover:bg-orange-600 transition duration-200 text-center">
+    Commencez dès maintenant et découvrez votre estimation
+</a>
 
 
     </div>
