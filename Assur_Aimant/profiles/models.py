@@ -29,10 +29,9 @@ class Profile(models.Model):
     region = models.CharField(max_length=50)
 
     def save(self, *args, **kwargs):
-        if self.height > 0 and self.weight > 0:
+        if self.height is not None and self.weight is not None and self.height > 0 and self.weight > 0:
             self.bmi = round(self.weight / (self.height ** 2), 1)  # calcul automatique
         super().save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username
-    
