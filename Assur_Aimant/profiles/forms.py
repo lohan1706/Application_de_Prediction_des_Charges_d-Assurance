@@ -75,6 +75,7 @@ class ProfileForm(forms.ModelForm):
             'sex': forms.Select(choices=SEX_CHOICES, attrs={'class': 'form-control'}),
             'height': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
             'weight': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
+            'children': forms.NumberInput(attrs={'class': 'form-control'}),
             'region': forms.Select(choices=REGION_CHOICES, attrs={'class': 'form-control'}),
         }
     
@@ -87,12 +88,6 @@ class ProfileForm(forms.ModelForm):
         if age < 0:
             raise forms.ValidationError("L'âge doit être un entier nul ou positif.")
         return age
-    
-    def clean_bmi(self):
-        bmi = self.cleaned_data.get('bmi')
-        if bmi is not None and (bmi <= 0 or bmi > 100):
-            raise forms.ValidationError("Le BMI doit être un nombre positif raisonnable.")
-        return bmi
     
     def clean_children(self):
         children = self.cleaned_data.get('children')
