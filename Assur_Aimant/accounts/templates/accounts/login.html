@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Se connecter{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-[70vh] px-4">
+    <div class="bg-IVOIRE border-4 border-ORANGE rounded-lg shadow-lg p-8 w-full max-w-md">
+        <h2 class="text-2xl font-bold text-GRIS text-center mb-6">Connexion</h2>
+
+       {% if form.non_field_errors %}
+        <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+            {{ form.non_field_errors }}
+        </div>
+        {% elif form.errors %}
+        <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+            Veuillez corriger les erreurs ci-dessous.
+        </div>
+        {% endif %}
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div>
+                <label class="block text-GRIS font-semibold mb-1 text-sm">
+                    {{ field.label }}
+                </label>
+                {{ field|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ORANGE" }}
+                {% if field.errors %}
+                    <span class="text-red-500 text-xs">{{ field.errors }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="w-full bg-ORANGE hover:bg-orange-600 text-white font-bold py-3 px-4 rounded transition duration-200">
+                Se connecter
+            </button>
+        </form>
+
+        <p class="mt-4 text-sm text-GRIS text-center">
+            Pas encore de compte ? 
+            <a href="{% url 'signup' %}" class="text-ORANGE font-bold hover:underline">Créer un compte</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
