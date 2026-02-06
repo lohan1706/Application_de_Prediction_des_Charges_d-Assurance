@@ -78,11 +78,10 @@ class PredictViewTest(TestCase):
 
         self.profile = Profile.objects.create(
             user=self.user,
-            age=30,  # ✅ Corrigé: >= 18
+            age=30,  
             sex='male',
-            height=1.75,  # ✅ Ajouté
-            weight=78.0,  # ✅ Ajouté
-            # bmi sera calculé automatiquement = 25.5
+            height=1.75, 
+            weight=78.0,  
             children=2,
             smoker=False,
             region='northwest'
@@ -137,8 +136,8 @@ class PredictViewTest(TestCase):
         form_data = {
             'age': 30,
             'sex': 'male',
-            'height': 1.75,  # ✅ Ajouté
-            'weight': 78.0,  # ✅ Ajouté
+            'height': 1.75,  
+            'weight': 78.0, 
             'bmi': 25.5,
             'children': 1,
             'smoker': True,
@@ -165,8 +164,8 @@ class PredictViewTest(TestCase):
         form_data = {
             'age': 30,
             'sex': 'male',
-            'height': 1.75,  # ✅ Ajouté
-            'weight': 78.0,  # ✅ Ajouté
+            'height': 1.75, 
+            'weight': 78.0, 
             'bmi': 25.5,
             'children': 2,
             'smoker': False,
@@ -187,8 +186,8 @@ class PredictViewTest(TestCase):
         form_data = {
             'age': 30,
             'sex': 'male',
-            'height': 1.75,  # ✅ Ajouté
-            'weight': 78.0,  # ✅ Ajouté
+            'height': 1.75,
+            'weight': 78.0, 
             'bmi': 25.5,
             'children': 2,
             'smoker': False,
@@ -214,8 +213,8 @@ class PredictViewTest(TestCase):
         form_data = {
             'age': 30,
             'sex': 'male',
-            'height': 1.75,  # ✅ Ajouté
-            'weight': 78.0,  # ✅ Ajouté
+            'height': 1.75, 
+            'weight': 78.0, 
             'bmi': 25.5,
             'children': 2,
             'smoker': False,
@@ -250,7 +249,7 @@ class PredictViewTest(TestCase):
         self.client.login(username='testuser', password='password123')
         
         form_data = {
-            'age': 15,  # ❌ Invalide
+            'age': 15, 
             'sex': 'male',
             'height': 1.75,
             'weight': 78.0,
@@ -277,7 +276,7 @@ class PredictViewTest(TestCase):
         self.client.login(username='testuser', password='password123')
         
         form_data = {
-            'age': 18,  # ✅ Valide (minimum)
+            'age': 18, 
             'sex': 'male',
             'height': 1.75,
             'weight': 78.0,
@@ -307,7 +306,7 @@ class PredictViewTest(TestCase):
             'height': 1.75,
             'weight': 78.0,
             'bmi': 25.5,
-            'children': -1,  # ❌ Invalide
+            'children': -1,
             'smoker': False,
             'region': 'northwest'
         }
@@ -385,9 +384,8 @@ class PredictionIntegrationTest(TestCase):
             user=self.user,
             age=35,
             sex='female',
-            height=1.68,  # ✅ Ajouté
-            weight=62.0,  # ✅ Ajouté
-            # bmi será calculado = 22.0
+            height=1.68, 
+            weight=62.0,  
             children=1,
             smoker=True,
             region='southeast'
@@ -413,8 +411,8 @@ class PredictionIntegrationTest(TestCase):
         form_data = {
             'age': 35,
             'sex': 'female',
-            'height': 1.68,  # ✅ Ajouté
-            'weight': 62.0,  # ✅ Ajouté
+            'height': 1.68, 
+            'weight': 62.0, 
             'bmi': 22.0,
             'children': 1,
             'smoker': True,
@@ -443,8 +441,8 @@ class PredictionIntegrationTest(TestCase):
         form_data = {
             'age': 35,
             'sex': 'female',
-            'height': 1.68,  # ✅ Ajouté
-            'weight': 62.0,  # ✅ Ajouté
+            'height': 1.68, 
+            'weight': 62.0,  
             'bmi': 22.0,
             'children': 1,
             'smoker': True,
